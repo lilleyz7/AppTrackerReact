@@ -2,10 +2,10 @@ import Cookies from "js-cookie"
 
 export function CheckForTokens(): boolean{
     const accessToken = Cookies.get("access")
-    const refreshToken = Cookies.get("refresh")
     if (accessToken){
         return true;
     }
+    const refreshToken = Cookies.get("refresh")
     if (refreshToken){
         try{
         RefreshTokens();
@@ -16,6 +16,12 @@ export function CheckForTokens(): boolean{
         }
     }
     return false;
+}
+
+export function GetTokens(){
+    const success = CheckForTokens();
+    if (!success) return new Error("Not logged in");
+    else return Cookies.get("access")!;
 }
 
 function RefreshTokens(){
