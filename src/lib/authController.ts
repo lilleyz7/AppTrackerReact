@@ -1,13 +1,14 @@
 import { TokenResponse } from "@/types/TokenResponse";
-import Cookies from "node_modules/@types/js-cookie";
-
+import Cookies from "js-cookie";
 interface RequestBody{
     email: string,
     password: string
 }
 
 export async function login(email: string, password: string){
-    const url = import.meta.env.BASE_API_DEV_URL + "/api/login";
+    const baseUrl = import.meta.env.VITE_BASE_API_DEV_URL;
+    console.log(baseUrl)
+    const url = baseUrl + "/login"
     const body: RequestBody = {email: email, password: password}
     const options = {
         method: "POST",
@@ -21,13 +22,13 @@ export async function login(email: string, password: string){
     if (typeof res === "string"){
         return new Error(res);
     }
-    Cookies.set("access", res.access);
-    Cookies.set("refresh", res.refresh);
+    Cookies.set("access", res.access, {expires: res.expiresIn});
+    Cookies.set("refresh", res.refresh, {expires: res.expiresIn * 8});
 
 }
 
 export async function register(email: string, password: string){
-    const url = import.meta.env.BASE_API_DEV_URL + "/api/login";
+    const url = import.meta.env.VITE_BASE_API_DEV_URL + "/register";
     const body: RequestBody = {email: email, password: password}
     const options = {
         method: "POST",

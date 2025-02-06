@@ -1,4 +1,5 @@
 export interface TokenResponse{
     access: string,
-    refresh: string
+    refresh: string,
+    expiresIn: number
 }

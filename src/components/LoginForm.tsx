@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "../components/ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { CheckForTokens } from "@/lib/authUtils";
+import { CheckForTokens } from "../lib/authUtils";
 import { useNavigate } from "react-router";
-import { login } from "@/lib/authController";
+import { login } from "../lib/authController";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +28,7 @@ export const LoginForm = () => {
   useEffect(() => {
         const success = CheckForTokens();
         if (success){
-            navigationController("/")
+            navigationController("/dashboard")
         }
   }, [navigationController])
 
@@ -55,6 +55,9 @@ export const LoginForm = () => {
                 id="password" 
                 type="password" 
                 value={password} 
+                pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$"
+                minLength={10} 
+                maxLength={40}
                 onChange={(e) => setPassword(e.target.value)} 
                 required 
               />

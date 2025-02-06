@@ -1,12 +1,12 @@
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
-import { Table, TableHead, TableRow, TableCell, TableBody } from "../components/ui/table";
+import { Table, TableRow, TableCell, TableBody } from "../components/ui/table";
 import {  Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Application } from "@/types/Application";
 import { useNavigate } from "react-router";
-import { CheckForTokens } from "@/lib/authUtils";
-import { getApplications } from "@/lib/applicationController";
+import { CheckForTokens } from "../lib/authUtils";
+import { getApplications } from "../lib/applicationController";
 
 export const Dashboard = () => {
     const [applications, setApplications] = useState<Application[]>([]);
@@ -99,14 +99,15 @@ export const Dashboard = () => {
           </Button>
         </div>
         <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Company</TableCell>
+
+            <TableRow className="text-xl font-bold">
+              <TableCell >Company</TableCell>
               <TableCell>Title</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Date Applied</TableCell>
             </TableRow>
-          </TableHead>
+
+          
           <TableBody>
             {applications.map((a) => (
                 <TableRow>
@@ -116,7 +117,7 @@ export const Dashboard = () => {
                     <TableCell>{a.DateAdded}</TableCell>
                 </TableRow>
             ))}
-            {/* <TableRow>
+            <TableRow>
               <TableCell>Google</TableCell>
               <TableCell>Software Engineer</TableCell>
               <TableCell className="text-green-500">Interviewing</TableCell>
@@ -127,7 +128,7 @@ export const Dashboard = () => {
               <TableCell>Backend Developer</TableCell>
               <TableCell className="text-blue-500">Applied</TableCell>
               <TableCell>Jan 10, 2025</TableCell>
-            </TableRow> */}
+            </TableRow>
           </TableBody>
         </Table>
       </div>

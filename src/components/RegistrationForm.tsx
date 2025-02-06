@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "../components/ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import { CheckForTokens } from "@/lib/authUtils";
+import { CheckForTokens } from "../lib/authUtils";
 import { useNavigate } from "react-router";
-import { register } from "@/lib/authController";
+import { register } from "../lib/authController";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -26,13 +26,13 @@ export const LoginForm = () => {
     if(err){
         setError(err)
     }
-    navigationController("/dashboard");
+    navigationController("/login");
   };
 
   useEffect(() => {
         const success = CheckForTokens();
         if (success){
-            navigationController("/")
+            navigationController("/dashboard")
         }
   }, [navigationController])
 
@@ -48,7 +48,10 @@ export const LoginForm = () => {
               <Input 
                 id="email" 
                 type="email" 
-                value={email} 
+                value={email}
+                pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$"
+                minLength={10} 
+                maxLength={40} 
                 onChange={(e) => setEmail(e.target.value)} 
                 required 
               />
@@ -59,6 +62,10 @@ export const LoginForm = () => {
                 id="password" 
                 type="password" 
                 value={password} 
+                pattern="^(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{7,}$"
+                title="Minimum of 7 characters. Should have at least one special character and one number and one UpperCase Letter."
+                minLength={7}
+                maxLength={40}
                 onChange={(e) => setPassword(e.target.value)} 
                 required 
               />
@@ -68,7 +75,9 @@ export const LoginForm = () => {
               <Input 
                 id="password" 
                 type="password" 
-                value={password} 
+                value={passwordConfirmation} 
+                minLength={7}
+                maxLength={20}
                 onChange={(e) => setPasswordConfirmation(e.target.value)} 
                 required 
               />

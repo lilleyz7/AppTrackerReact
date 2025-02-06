@@ -6,7 +6,7 @@ export async function getApplications(): Promise<Error | Application[]>{
     if (typeof token !== "string"){
         return token
     }
-    const baseUrl = import.meta.env.BASE_API_DEV_URL;
+    const baseUrl = import.meta.env.VITE_BASE_API_DEV_URL;
     const finalUrl = baseUrl + "/apps";
     const options = {
         method: "GET",
