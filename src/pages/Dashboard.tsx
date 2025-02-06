@@ -14,6 +14,7 @@ export const Dashboard = () => {
     const [interviewCount, setInterviewCount ] = useState<number>(0);
     const [offerCount, setOfferCount] = useState<number>(0);
     const [error, setError] = useState<Error>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const navigationController = useNavigate();
 
@@ -29,6 +30,7 @@ export const Dashboard = () => {
             const result = await getApplications();
             if (result instanceof Error){
                 setError(result);
+                setIsLoading(false);
             } else{
                 let interviews = 0;
                 let offers = 0;
@@ -52,12 +54,17 @@ export const Dashboard = () => {
                 setAppliedCount(applied);
                 setInterviewCount(interviews);
                 setOfferCount(offers);
+                setIsLoading(false);
             }
         }
 
         getAuthStatus();
         applicationRequest();
     }, [navigationController])
+
+    if (isLoading){
+        return <p>Loading...</p>
+    }
   return (
     <div className="p-6 max-w-4xl mx-auto">
         <p>{error?.message}</p>
