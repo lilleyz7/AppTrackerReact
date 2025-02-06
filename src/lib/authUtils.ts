@@ -40,8 +40,8 @@ async function RefreshTokens(refreshToken: string){
     try{
         const res = await fetch(url, options)
         const tokens: TokenResponse = await  res.json();
-        Cookies.set("access", tokens.access, {expires: tokens.expiresIn})
-        Cookies.set("refresh", tokens.refresh, {expires: tokens.expiresIn * 8})
+        Cookies.set("access", tokens.access, {expires: tokens.expiresIn, sameSite: "None"})
+        Cookies.set("refresh", tokens.refresh, {expires: tokens.expiresIn * 8, sameSite: "None"})
     } catch(e){
         console.log(e)
         logout();

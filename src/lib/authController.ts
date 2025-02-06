@@ -22,8 +22,8 @@ export async function login(email: string, password: string){
     if (typeof res === "string"){
         return new Error(res);
     }
-    Cookies.set("access", res.access, {expires: res.expiresIn});
-    Cookies.set("refresh", res.refresh, {expires: res.expiresIn * 8});
+    Cookies.set("access", res.access, {expires: res.expiresIn, sameSite: "strict", secure: true});
+    Cookies.set("refresh", res.refresh, {expires: res.expiresIn * 8, sameSite: "strict", secure: true});
 
 }
 
