@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Application } from "@/types/Application";
 import {  NavLink, useNavigate } from "react-router";
 import { CheckForTokens } from "../lib/authUtils";
-import { getApplications } from "../lib/applicationController";
+import { deleteApplication, getApplications } from "../lib/applicationController";
 
 export const Dashboard = () => {
     const [applications, setApplications] = useState<Application[]>([]);
@@ -16,6 +16,17 @@ export const Dashboard = () => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     const navigationController = useNavigate();
+    const handleDelete = async (id: string) =>{
+      setIsLoading(true)
+      const result = await deleteApplication(id)
+      if (result){
+        setError(result)
+      setIsLoading(false)
+      } else{
+        setIsLoading(false)
+        alert("Delete Successful")
+      }
+    }
 
     useEffect(() => {
         async function getAuthStatus(){
@@ -57,11 +68,11 @@ export const Dashboard = () => {
         applicationRequest();
     }, [navigationController])
 
-    if (isLoading){
-        return <p>Loading...</p>
-    }
+
   return (
+    
     <div className="p-6 max-w-4xl mx-auto">
+        {isLoading && (<p>Loading...</p>)}
         <p>{error?.message}</p>
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-4 mb-6">
@@ -110,7 +121,7 @@ export const Dashboard = () => {
                     <TableCell>{a.title}</TableCell>
                     <TableCell>{a.status}</TableCell>
                     <TableCell>{a.dateAdded}</TableCell>
-                    <TableCell><Button>Delete</Button></TableCell>
+                    <TableCell><Button variant="destructive" onClick={() => handleDelete(a.id)}>Delete</Button></TableCell>
                 </TableRow>
             ))}
           </TableBody>

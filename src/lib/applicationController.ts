@@ -60,7 +60,7 @@ export function updateApplication(){
 
 }
 
-export async function deleteApplication(appId: string){
+export async function deleteApplication(appId: string): (Promise<Error | undefined>){
     const token = GetTokens();
     if (typeof token !== "string"){
         return token
@@ -70,16 +70,19 @@ export async function deleteApplication(appId: string){
     const options = {
         method: "DELETE",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
         }
     }
 
     try{
         const result = await fetch(url, options)
         if (!result.ok){
-            return result.text()
+            return new Error(await result.text())
         }
+        return 
     } catch(e){
-        return e + ""
+        return new Error(e + "")
     }
+
 }
