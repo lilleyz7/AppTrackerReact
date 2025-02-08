@@ -1,6 +1,6 @@
 import Cookies from "js-cookie"
 import { logout } from "./authController";
-import { TokenResponse } from "@/types/TokenResponse";
+import { TokenResponse } from "../types/TokenResponse";
 
 export function CheckForTokens(): boolean{
     const accessToken = Cookies.get("access")
@@ -8,6 +8,7 @@ export function CheckForTokens(): boolean{
         return true;
     }
     const refreshToken = Cookies.get("refresh")
+    console.log(refreshToken)
     if (refreshToken){
         try{
         RefreshTokens(refreshToken);
@@ -18,6 +19,7 @@ export function CheckForTokens(): boolean{
             return false;
         }
     }
+    console.log("How?")
     return false;
 }
 
@@ -29,6 +31,7 @@ export function GetTokens(){
 
 async function RefreshTokens(refreshToken: string){
     const url = import.meta.env.VITE_BASE_API_DEV_URL + "/refresh"
+    console.log("Refreshing tokens")
     const tokenString = `Bearer ${refreshToken}`
     const options = {
         method: "POST",
@@ -40,8 +43,8 @@ async function RefreshTokens(refreshToken: string){
     try{
         const res = await fetch(url, options)
         const tokens: TokenResponse = await  res.json();
-        Cookies.set("access", tokens.access, {expires: tokens.expiresIn, sameSite: "None"})
-        Cookies.set("refresh", tokens.refresh, {expires: tokens.expiresIn * 8, sameSite: "None"})
+        Cookies.set("access", tokens.accessToken, {expires: tokens.expiresIn, sameSite: "None"})
+        Cookies.set("refresh", tokens.refreshToken, {expires: tokens.expiresIn * 8, sameSite: "None"})
     } catch(e){
         console.log(e)
         logout();

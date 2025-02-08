@@ -1,10 +1,9 @@
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Table, TableRow, TableCell, TableBody } from "../components/ui/table";
-import {  Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Application } from "@/types/Application";
-import { useNavigate } from "react-router";
+import {  NavLink, useNavigate } from "react-router";
 import { CheckForTokens } from "../lib/authUtils";
 import { getApplications } from "../lib/applicationController";
 
@@ -19,7 +18,7 @@ export const Dashboard = () => {
     const navigationController = useNavigate();
 
     useEffect(() => {
-        function getAuthStatus(){
+        async function getAuthStatus(){
             const success = CheckForTokens();
             if (!success){
                 navigationController("/login")
@@ -37,20 +36,16 @@ export const Dashboard = () => {
                 let applied = 0;
                 setApplications(result);
                 for (let i = 0; i < result.length; i++){
-                    switch (result[i].Status.toLowerCase()){
-                        case "interviewed": {
-                            interviews++;
-                            break
-                        }
-                        case "offered": {
-                            offers++;
-                            break
-                        }
-                        default:
-                            applied ++
-                            break
+                    if(result[i].status === "offered"){
+                        offers++;
+                    } else if (result[i].status === "interviewed"){
+                        interviews++;
+                    } else{
+                        console.log(result[i])
+                        applied++
                     }
                 }
+                console.log(applications)
                 setAppliedCount(applied);
                 setInterviewCount(interviews);
                 setOfferCount(offers);
@@ -95,7 +90,7 @@ export const Dashboard = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">Job Applications</h2>
           <Button className="flex items-center gap-2">
-            <Plus size={16} /> Add Job
+            <NavLink to="/addApp">Add Application</NavLink>
           </Button>
         </div>
         <Table>
@@ -110,11 +105,11 @@ export const Dashboard = () => {
           
           <TableBody>
             {applications.map((a) => (
-                <TableRow>
-                    <TableCell>{a.Company}</TableCell>
-                    <TableCell>{a.Title}</TableCell>
-                    <TableCell>{a.Status}</TableCell>
-                    <TableCell>{a.DateAdded}</TableCell>
+                <TableRow key={a.id}>
+                    <TableCell>{a.company}</TableCell>
+                    <TableCell>{a.title}</TableCell>
+                    <TableCell>{a.status}</TableCell>
+                    <TableCell>{a.dateAdded}</TableCell>
                 </TableRow>
             ))}
             <TableRow>

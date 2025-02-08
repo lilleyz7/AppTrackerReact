@@ -1,10 +1,10 @@
 export interface Application{
-    Id: string,
-    Title: string, 
-    Company: string, 
-    Notes?: string, 
-    Status: string,
-    DateAdded: string,
-    UserId: string,
-    Link?: string
+    id: string,
+    title: string, 
+    company: string, 
+    notes?: string, 
+    status: string,
+    dateAdded: string,
+    userId: string,
+    link?: string
 }

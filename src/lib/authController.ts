@@ -22,8 +22,9 @@ export async function login(email: string, password: string){
     if (typeof res === "string"){
         return new Error(res);
     }
-    Cookies.set("access", res.access, {expires: res.expiresIn, sameSite: "strict", secure: true});
-    Cookies.set("refresh", res.refresh, {expires: res.expiresIn * 8, sameSite: "strict", secure: true});
+    console.log(res);
+    Cookies.set("access", res.accessToken, {expires: res.expiresIn, sameSite: "strict", secure: true});
+    Cookies.set("refresh", res.refreshToken, {expires: res.expiresIn * 8, sameSite: "strict", secure: true});
 
 }
 
@@ -53,6 +54,7 @@ async function makeLoginRequest(url: string, options: RequestInit){
     try{
         const response = await fetch(url, options);
         const jsonData: TokenResponse = await response.json();
+        console.log(jsonData)
         return jsonData;
     } catch(e){
         return "failed to get data with error: " + e;
