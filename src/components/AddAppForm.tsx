@@ -82,6 +82,7 @@ export const AddApplicationForm = () => {
                 id="company" 
                 name="company" 
                 type="text" 
+                 pattern="[A-Za-z0-9]"
                 value={formData.company} 
                 onChange={handleChange} 
                 required 
@@ -93,6 +94,7 @@ export const AddApplicationForm = () => {
                 id="title" 
                 name="title" 
                 type="text" 
+                pattern="[A-Za-z0-9]"
                 value={formData.title} 
                 onChange={handleChange} 
                 required 
