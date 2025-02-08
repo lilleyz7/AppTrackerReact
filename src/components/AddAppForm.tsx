@@ -9,6 +9,7 @@ import { CheckForTokens, GetTokens } from "../lib/authUtils";
 import { logout } from "../lib/authController";
 import { useNavigate } from "react-router";
 import { addApplication } from "../lib/applicationController";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
 
 export const AddApplicationForm = () => {
     const navigationController = useNavigate();
@@ -22,7 +23,7 @@ export const AddApplicationForm = () => {
     const [formData, setFormData] = useState({
         company: "",
         title:"",
-        status: "",
+        status: "applied",
         link: "",
         notes: "",
     });
@@ -98,15 +99,25 @@ export const AddApplicationForm = () => {
               />
             </div>
             <div className="mb-4">
-              <Label htmlFor="status">Status</Label>
-              <Input 
-                id="status" 
+              <Select 
                 name="status" 
-                type="text" 
                 value={formData.status} 
-                onChange={handleChange} 
                 required 
-              />
+                onValueChange={(value) => setFormData({ ...formData, status: value })}
+              >
+                <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select a fruit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Status</SelectLabel>
+                  <SelectItem value="offered">Offered</SelectItem>
+                  <SelectItem value="interviewed">Interviewed</SelectItem>
+                  <SelectItem value="applied">Applied</SelectItem>
+                  <SelectItem value="applied">Rejected</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+              </Select>
             </div>
             <div className="mb-4">
               <Label htmlFor="link">Link</Label>
