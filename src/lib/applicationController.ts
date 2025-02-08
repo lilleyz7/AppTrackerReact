@@ -60,6 +60,26 @@ export function updateApplication(){
 
 }
 
-export function deleteApplication(){
+export async function deleteApplication(appId: string){
+    const token = GetTokens();
+    if (typeof token !== "string"){
+        return token
+    }
 
+    const url = import.meta.env.VITE_BASE_API_DEV_URL + `/delete/${appId}`
+    const options = {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }
+
+    try{
+        const result = await fetch(url, options)
+        if (!result.ok){
+            return result.text()
+        }
+    } catch(e){
+        return e + ""
+    }
 }

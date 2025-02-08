@@ -29,7 +29,12 @@ export const AddApplicationForm = () => {
     });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+  setFormData({
+    ...formData,
+    [name]: name !== "link" ? value.replace(/[^a-zA-Z0-9 ]+/g, "") : value, // Apply regex only for company
+  });
   };
 
   async function saveApp() {
@@ -82,7 +87,6 @@ export const AddApplicationForm = () => {
                 id="company" 
                 name="company" 
                 type="text" 
-                 pattern="[A-Za-z0-9]"
                 value={formData.company} 
                 onChange={handleChange} 
                 required 
@@ -94,7 +98,6 @@ export const AddApplicationForm = () => {
                 id="title" 
                 name="title" 
                 type="text" 
-                pattern="[A-Za-z0-9]"
                 value={formData.title} 
                 onChange={handleChange} 
                 required 

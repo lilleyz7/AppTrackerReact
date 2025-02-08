@@ -110,20 +110,9 @@ export const Dashboard = () => {
                     <TableCell>{a.title}</TableCell>
                     <TableCell>{a.status}</TableCell>
                     <TableCell>{a.dateAdded}</TableCell>
+                    <TableCell><Button>Delete</Button></TableCell>
                 </TableRow>
             ))}
-            <TableRow>
-              <TableCell>Google</TableCell>
-              <TableCell>Software Engineer</TableCell>
-              <TableCell className="text-green-500">Interviewing</TableCell>
-              <TableCell>Jan 15, 2025</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Amazon</TableCell>
-              <TableCell>Backend Developer</TableCell>
-              <TableCell className="text-blue-500">Applied</TableCell>
-              <TableCell>Jan 10, 2025</TableCell>
-            </TableRow>
           </TableBody>
         </Table>
       </div>
