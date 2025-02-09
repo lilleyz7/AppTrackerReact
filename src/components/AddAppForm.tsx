@@ -119,7 +119,7 @@ export const AddApplicationForm = () => {
                   <SelectItem value="offered">Offered</SelectItem>
                   <SelectItem value="interviewed">Interviewed</SelectItem>
                   <SelectItem value="applied">Applied</SelectItem>
-                  <SelectItem value="applied">Rejected</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
                 </SelectGroup>
               </SelectContent>
               </Select>
