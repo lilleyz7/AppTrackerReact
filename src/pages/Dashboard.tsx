@@ -2,10 +2,13 @@ import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Table, TableRow, TableCell, TableBody } from "../components/ui/table";
 import { useEffect, useState } from "react";
-import { Application } from "@/types/Application";
+import { Application } from "../types/Application";
 import {  NavLink, useNavigate } from "react-router";
-import { CheckForTokens } from "../lib/authUtils";
-import { deleteApplication, getApplications } from "../lib/applicationController";
+import { CheckForTokens, GetTokens } from "../lib/authUtils";
+import { deleteApplication, getApplications, updateApplication } from "../lib/applicationController";
+import { UpdateApplicationForm } from "../components/UpdateAppForm";
+import { ApplicationDTO } from "../types/ApplicationDTO";
+import { logout } from "../lib/authController";
 
 export const Dashboard = () => {
     const [applications, setApplications] = useState<Application[]>([]);
@@ -14,6 +17,8 @@ export const Dashboard = () => {
     const [offerCount, setOfferCount] = useState<number>(0);
     const [error, setError] = useState<Error>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [formOpen, setFormOpen] = useState<boolean>(false);
+    const [selectedApp, setSelectedApp] = useState<Application | undefined>(undefined);
 
     const navigationController = useNavigate();
     const handleDelete = async (id: string) =>{
@@ -26,6 +31,32 @@ export const Dashboard = () => {
         setIsLoading(false)
         alert("Delete Successful")
       }
+    }
+
+    const showUpdateForm = (a: Application) => {
+      setSelectedApp(a);
+      setFormOpen(true);
+    }
+
+    const hideForm = () => {
+      setFormOpen(false)
+    }
+
+    async function handleUpdate(appToUpdate: ApplicationDTO, appId: string){
+      const tokens = GetTokens();
+          if (tokens instanceof Error){
+              logout()
+          }
+          try{
+              const responseValue = await updateApplication(appToUpdate, appId)
+              if(responseValue){
+                  alert(responseValue)
+              }
+              hideForm();
+          } catch(e){
+              alert(e);
+              hideForm()
+          }
     }
 
     useEffect(() => {
@@ -95,6 +126,10 @@ export const Dashboard = () => {
           </CardContent>
         </Card>
       </div>
+
+      {formOpen && selectedApp && (
+        <UpdateApplicationForm app={selectedApp} update={handleUpdate} hide={hideForm}  />
+      )}
       
       {/* Job Applications Table */}
       <div className="bg-white shadow-md rounded-lg p-4">
@@ -117,10 +152,11 @@ export const Dashboard = () => {
           <TableBody>
             {applications.map((a) => (
                 <TableRow key={a.id}>
-                    <TableCell>{a.company}</TableCell>
+                    <TableCell ><a href={a.link} className="text-blue-600">{a.company}</a></TableCell>
                     <TableCell>{a.title}</TableCell>
                     <TableCell>{a.status}</TableCell>
-                    <TableCell>{a.dateAdded}</TableCell>
+                    <TableCell>{a.dateAdded.slice(0, 10)}</TableCell>
+                    <TableCell><Button onClick={() => showUpdateForm(a)}>Details</Button></TableCell>
                     <TableCell><Button variant="destructive" onClick={() => handleDelete(a.id)}>Delete</Button></TableCell>
                 </TableRow>
             ))}

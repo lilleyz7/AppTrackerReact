@@ -6,5 +6,7 @@ export interface Application{
     status: string,
     dateAdded: string,
     userId: string,
-    link: string
+    link: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    customUser: any
 }

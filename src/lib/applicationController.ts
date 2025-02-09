@@ -56,13 +56,13 @@ export async function addApplication(appToAdd: ApplicationDTO): Promise<string |
     }
 }
 
-export async function updateApplication(appToUpdate: Application){
+export async function updateApplication(appToUpdate: ApplicationDTO, appId: string){
     const token = GetTokens();
     if (typeof token !== "string"){
         return token
     }
 
-    const url = import.meta.env.VITE_BASE_API_DEV_URL + `/update`
+    const url = import.meta.env.VITE_BASE_API_DEV_URL + `/update/${appId}`
     const options = {
         method: "PUT",
         headers: {

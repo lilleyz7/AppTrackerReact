@@ -4,28 +4,30 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
-import { CheckForTokens, GetTokens } from "../lib/authUtils";
-import { logout } from "../lib/authController";
+import { CheckForTokens } from "../lib/authUtils";
 import { useNavigate } from "react-router";
-import { updateApplication } from "../lib/applicationController";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "./ui/select";
-import { Application } from "@/types/Application";
+import { UpdateProps } from "../types/UpDateProps";
+import { ApplicationDTO } from "../types/ApplicationDTO";
 
-export const UpdateApplicationForm = (AppToUpdate: Application) => {
+export const UpdateApplicationForm: React.FC<UpdateProps> = ({app, update, hide}) => {
     const navigationController = useNavigate();
     useEffect(() => {
+        if (!app){
+          alert("Invalid app")
+        }
         const loggedIn = CheckForTokens();
         if(!loggedIn){
-            navigationController("/dashboard")
+            navigationController("/login")
         }
     }, [navigationController])
 
     const [formData, setFormData] = useState({
-        company: AppToUpdate.company,
-        title:AppToUpdate.title,
-        status: AppToUpdate.status,
-        link: AppToUpdate.link ,
-        notes: AppToUpdate.notes ,
+        company: app.company,
+        title:app.title,
+        status: app.status,
+        link: app.link ,
+        notes: app.notes ,
     });
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -38,37 +40,14 @@ export const UpdateApplicationForm = (AppToUpdate: Application) => {
   };
 
   async function updateApp() {
-    const tokens = GetTokens();
-    if (tokens instanceof Error){
-        logout()
-    }
-    try{
-        const app: Application = {
-            title: formData.title,
-            company: formData.company,
-            notes: formData.notes,
-            status: formData.status,
-            link: formData.link,
-            id: AppToUpdate.id,
-            dateAdded: AppToUpdate.dateAdded,
-            userId: AppToUpdate.userId
+        const appToUpdate: ApplicationDTO = {
+            Title: formData.title,
+            Company: formData.company,
+            Notes: formData.notes,
+            Status: formData.status,
+            Link: formData.link,
         }
-        const responseValue = await updateApplication(app)
-        if(responseValue){
-            alert(responseValue)
-        }
-        navigationController("/dashboard")
-    } catch(e){
-        alert(e);
-    }
-  }
-
-  const onCancelChanges = () => {
-    setFormData({company: AppToUpdate.company,
-        title:AppToUpdate.title,
-        status: AppToUpdate.status,
-        link: AppToUpdate.link ,
-        notes: AppToUpdate.notes ,})
+        await update(appToUpdate, app.id)
   }
 
   const handleSubmit = (e: FormEvent) => {
@@ -148,8 +127,7 @@ export const UpdateApplicationForm = (AppToUpdate: Application) => {
               />
             </div>
             <div className="flex justify-between">
-              <Button type="button" onClick={() => navigationController("/dashboard")} className="bg-gray-500">Go Back</Button>
-              <Button type="button" onClick={onCancelChanges} className="bg-gray-500">Cancel Changes</Button>
+              <Button type="button" onClick={() => hide()} className="bg-gray-500">Cancel Changes</Button>
               <Button type="submit">Update</Button>
             </div>
           </form>
