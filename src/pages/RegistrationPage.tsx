@@ -1,9 +1,9 @@
-import { LoginForm } from "../components/LoginForm"
+import { RegistrationForm } from "../components/RegistrationForm"
 
 export const RegistrationPage = (): JSX.Element =>{
     return (
         <div>
-            <LoginForm/>
+            <RegistrationForm/>
         </div>
     )
 }

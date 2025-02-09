@@ -10,8 +10,6 @@ import { login } from "../lib/authController";
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<Error>();
-
   
   const navigationController = useNavigate();
 
@@ -20,9 +18,10 @@ export const LoginForm = () => {
     console.log("Logging in with", { email, password });
     const err = await login(email, password);
     if(err){
-        setError(err)
+        alert("Invalid Credentials")
+    } else{
+      navigationController("/dashboard");
     }
-    navigationController("/dashboard");
   };
 
   useEffect(() => {
@@ -34,7 +33,6 @@ export const LoginForm = () => {
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
-        {error && (<p>{error.message}</p>)}
       <Card className="w-full max-w-sm p-6 bg-white shadow-lg rounded-lg">
         <CardContent>
           <h2 className="text-2xl font-bold text-center mb-4">Login</h2>

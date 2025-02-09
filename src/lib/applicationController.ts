@@ -56,8 +56,31 @@ export async function addApplication(appToAdd: ApplicationDTO): Promise<string |
     }
 }
 
-export function updateApplication(){
+export async function updateApplication(appToUpdate: Application){
+    const token = GetTokens();
+    if (typeof token !== "string"){
+        return token
+    }
 
+    const url = import.meta.env.VITE_BASE_API_DEV_URL + `/update`
+    const options = {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(appToUpdate) 
+    }
+
+    try{
+        const result = await fetch(url, options)
+        if (!result.ok){
+            return new Error(await result.text())
+        }
+        return 
+    } catch(e){
+        return new Error(e + "")
+    }
 }
 
 export async function deleteApplication(appId: string): (Promise<Error | undefined>){

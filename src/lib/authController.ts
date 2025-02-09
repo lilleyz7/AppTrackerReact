@@ -22,9 +22,10 @@ export async function login(email: string, password: string){
     if (typeof res === "string"){
         return new Error(res);
     }
-    console.log(res);
-    Cookies.set("access", res.accessToken, {expires: res.expiresIn, sameSite: "strict", secure: true});
-    Cookies.set("refresh", res.refreshToken, {expires: res.expiresIn * 8, sameSite: "strict", secure: true});
+    else{
+        Cookies.set("access", res.accessToken, {expires: res.expiresIn, sameSite: "strict", secure: true});
+        Cookies.set("refresh", res.refreshToken, {expires: res.expiresIn * 8, sameSite: "strict", secure: true});
+    }
 
 }
 
@@ -53,9 +54,14 @@ export function logout(){
 async function makeLoginRequest(url: string, options: RequestInit){
     try{
         const response = await fetch(url, options);
-        const jsonData: TokenResponse = await response.json();
-        console.log(jsonData)
-        return jsonData;
+        if (!response.ok){
+            return response.text();
+        } else{
+
+            const jsonData: TokenResponse = await response.json();
+            console.log(jsonData)
+            return jsonData;
+        }
     } catch(e){
         return "failed to get data with error: " + e;
     }

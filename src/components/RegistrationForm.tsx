@@ -7,7 +7,7 @@ import { CheckForTokens } from "../lib/authUtils";
 import { useNavigate } from "react-router";
 import { register } from "../lib/authController";
 
-export const LoginForm = () => {
+export const RegistrationForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
